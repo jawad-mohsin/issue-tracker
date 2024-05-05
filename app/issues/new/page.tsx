@@ -10,13 +10,16 @@ import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createIssueSchema } from "@/app/validationSchema";
 import { z } from "zod";
-import { Text } from "@radix-ui/themes";
 import ErrorMessage from "@/app/components/ErrorMEssage";
+import Spinner from "@/app/components/Spinner";
+import { MdOutlineDownloadDone } from "react-icons/md";
 
 type IssueForm = z.infer<typeof createIssueSchema>;
 
 const NewIssuePage = () => {
   const [error, setError] = useState("");
+  const [isSubmitting, setSubmitting] = useState(false);
+  const [isSubmitted, setSubmitted] = useState(false);
   const router = useRouter();
   const {
     register,
@@ -39,10 +42,14 @@ const NewIssuePage = () => {
         className="max-w-xl space-y-5"
         onSubmit={handleSubmit(async (data) => {
           try {
+            setSubmitting(true);
             await axios.post("/api/issues", data);
+            setSubmitting(false);
+            setSubmitted(true);
             router.push("/issues");
             console.log(data);
           } catch (error) {
+            setSubmitting(false);
             setError("An error is occured");
           }
         })}
@@ -60,7 +67,10 @@ const NewIssuePage = () => {
           )}
         />
         <ErrorMessage>{errors.description?.message}</ErrorMessage>
-        <Button>Create New Issue</Button>
+        <Button disabled={isSubmitting}>
+          Create New Issue {isSubmitted && <MdOutlineDownloadDone />}
+          {isSubmitting && <Spinner />}
+        </Button>
       </form>
     </div>
   );
