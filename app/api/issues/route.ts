@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
 import prisma from "@/prisma/client";
 import { createIssueSchema } from "../../validationSchema";
 
@@ -15,4 +14,16 @@ export async function POST(request: NextRequest) {
   });
 
   return NextResponse.json(newIssue, { status: 201 });
+}
+
+export async function GET() {
+  try {
+    const issues = await prisma.issue.findMany();
+    return NextResponse.json(issues, { status: 200 });
+  } catch (error) {
+    return NextResponse.json(
+      { message: "Failed to fetch issues" },
+      { status: 500 }
+    );
+  }
 }
