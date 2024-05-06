@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createIssueSchema } from "@/app/validationSchema";
 import { z } from "zod";
-import ErrorMessage from "@/app/components/ErrorMEssage";
+import ErrorMessage from "@/app/components/ErrorMessage";
 import Spinner from "@/app/components/Spinner";
 import { MdOutlineDownloadDone } from "react-icons/md";
 

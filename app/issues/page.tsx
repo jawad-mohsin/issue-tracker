@@ -5,17 +5,11 @@ import Link from "next/link";
 import { Table } from "@radix-ui/themes";
 import axios from "axios";
 import Spinner from "../components/Spinner";
-import ErrorMessage from "../components/ErrorMEssage";
+import ErrorMessage from "../components/ErrorMessage";
 import { CiEdit } from "react-icons/ci";
 import { FaPlus } from "react-icons/fa6";
-
-interface Issue {
-  id: number;
-  title: string;
-  description: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import IssueStatusBadge from "../components/IssueStatusBadge";
+import delay from "delay";
 
 const IssuesPage = () => {
   const [issues, setIssues] = useState([]);
@@ -29,6 +23,8 @@ const IssuesPage = () => {
       setIssues(response.data);
       setLoading(false);
     } catch (err) {
+      console.log(err);
+
       setError("Error occured while fetching data");
       setLoading(false);
     }
@@ -48,25 +44,41 @@ const IssuesPage = () => {
           </Link>
         </Button>
       </div>
-      <Table.Root>
+      <Table.Root variant="surface">
         <Table.Header>
           <Table.Row>
             <Table.ColumnHeaderCell>Ttile</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>Description</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell className="hidden md:table-cell">
+              Description
+            </Table.ColumnHeaderCell>
             <Table.ColumnHeaderCell>Status</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>Created At</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>Updated At</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell className="hidden sm:table-cell">
+              Created At
+            </Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell className="hidden md:table-cell">
+              Updated At
+            </Table.ColumnHeaderCell>
             <Table.ColumnHeaderCell>Edit</Table.ColumnHeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
           {issues.map((issue) => (
             <Table.Row key={issue.id}>
-              <Table.Cell>{issue.title}</Table.Cell>
-              <Table.Cell>{issue.description}</Table.Cell>
-              <Table.Cell>{issue.staus}</Table.Cell>
-              <Table.Cell>{issue.createdAt}</Table.Cell>
-              <Table.Cell>{issue.updatedAt}</Table.Cell>
+              <Table.Cell>
+                <Link href={`/issues/${issue.id}`}>{issue.title}</Link>
+              </Table.Cell>
+              <Table.Cell className="hidden md:table-cell">
+                {issue.description}
+              </Table.Cell>
+              <Table.Cell>
+                <IssueStatusBadge status={issue.status} />
+              </Table.Cell>
+              <Table.Cell className="hidden sm:table-cell">
+                {issue.createdAt}
+              </Table.Cell>
+              <Table.Cell className="hidden md:table-cell">
+                {issue.updatedAt}
+              </Table.Cell>
               <Table.Cell>
                 <Link href={`/issues/${issue.id}/edit`}>
                   <CiEdit />
