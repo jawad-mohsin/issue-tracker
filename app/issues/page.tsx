@@ -9,7 +9,6 @@ import ErrorMessage from "../components/ErrorMessage";
 import { CiEdit } from "react-icons/ci";
 import { FaPlus } from "react-icons/fa6";
 import IssueStatusBadge from "../components/IssueStatusBadge";
-import delay from "delay";
 
 const IssuesPage = () => {
   const [issues, setIssues] = useState([]);
@@ -64,7 +63,7 @@ const IssuesPage = () => {
         <Table.Body>
           {issues.map((issue) => (
             <Table.Row key={issue.id}>
-              <Table.Cell>
+              <Table.Cell className="text-violet text-violet-700 hover:underline">
                 <Link href={`/issues/${issue.id}`}>{issue.title}</Link>
               </Table.Cell>
               <Table.Cell className="hidden md:table-cell">
