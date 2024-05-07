@@ -1,21 +1,21 @@
 "use client";
 
 import React, { useState } from "react";
-import { TextField, Callout, Button } from "@radix-ui/themes";
+import { TextField, Callout, Button, Text } from "@radix-ui/themes";
 import SimpleMDE from "react-simplemde-editor";
 import { useForm, Controller } from "react-hook-form";
 import "easymde/dist/easymde.min.css";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createIssueSchema } from "@/app/validationSchema";
+import { issueSchema } from "@/app/validationSchema";
 import { z } from "zod";
 import ErrorMessage from "@/app/components/ErrorMessage";
 import Spinner from "@/app/components/Spinner";
 import { MdOutlineDownloadDone } from "react-icons/md";
 import { Issue } from "@prisma/client";
 
-type IssueFormData = z.infer<typeof createIssueSchema>;
+type IssueFormData = z.infer<typeof issueSchema>;
 
 interface Props {
   issue: Issue;
@@ -34,13 +34,17 @@ const IssueForm = ({ issue }: Props) => {
     handleSubmit,
     formState: { errors },
   } = useForm<IssueFormData>({
-    resolver: zodResolver(createIssueSchema),
+    resolver: zodResolver(issueSchema),
   });
 
   const onSubmit = handleSubmit(async (data) => {
     try {
       setSubmitting(true);
-      await axios.post("/api/issues", data);
+      if (issue) {
+        await axios.patch(`/api/issues/${issue.id}`, data);
+      } else {
+        await axios.post("/api/issues", data);
+      }
       setSubmitting(false);
       setSubmitted(true);
       router.push("/issues");
@@ -75,7 +79,9 @@ const IssueForm = ({ issue }: Props) => {
         />
         <ErrorMessage>{errors.description?.message}</ErrorMessage>
         <Button disabled={isSubmitting}>
-          {issue ? "Update Issue" : "Create New Issue"}
+          <Text className="cursor-pointer">
+            {issue ? "Update Issue" : "Create New Issue"}
+          </Text>
           {isSubmitted && <MdOutlineDownloadDone />}
           {isSubmitting && <Spinner />}
         </Button>
