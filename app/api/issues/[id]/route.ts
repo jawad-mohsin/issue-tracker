@@ -33,3 +33,27 @@ export async function PATCH(request: NextRequest, { params: { id } }: Props) {
     );
   }
 }
+
+export async function DELETE(request: NextRequest, { params: { id } }: Props) {
+  try {
+    // Check if the issue exists
+    const existingIssue = await prisma.issue.findUnique({
+      where: { id: parseInt(id) },
+    });
+    if (!existingIssue) {
+      return NextResponse.json({ message: "Issue not found" }, { status: 404 });
+    }
+
+    // Delete the issue
+    await prisma.issue.delete({
+      where: { id: parseInt(id) },
+    });
+
+    return NextResponse.json({ message: "Issue deleted" }, { status: 200 });
+  } catch (error) {
+    return NextResponse.json(
+      { message: "Failed to delete issue" },
+      { status: 500 }
+    );
+  }
+}
