@@ -6,7 +6,7 @@ import { AiFillBug } from "react-icons/ai";
 import { usePathname } from "next/navigation";
 import classnames from "classnames";
 
-const Navbar = () => {
+const NavbarPage = () => {
   const currentPath = usePathname();
   console.log(currentPath);
 
@@ -22,7 +22,7 @@ const Navbar = () => {
       </Link>
       <ul className="flex space-x-6">
         {links.map((link) => (
-          <li>
+          <li key={link.href}>
             <Link
               key={link.href}
               className={classnames({
@@ -41,4 +41,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default NavbarPage;

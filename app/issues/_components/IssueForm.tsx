@@ -18,7 +18,7 @@ import { Issue } from "@prisma/client";
 type IssueFormData = z.infer<typeof issueSchema>;
 
 interface Props {
-  issue: Issue;
+  issue?: Issue | null;
 }
 
 const IssueForm = ({ issue }: Props) => {

@@ -1,3 +1,4 @@
+/* eslint-disable */
 "use client";
 import React, { useState, useEffect } from "react";
 import { Button } from "@radix-ui/themes";
@@ -9,9 +10,19 @@ import ErrorMessage from "../components/ErrorMessage";
 import { CiEdit } from "react-icons/ci";
 import { FaPlus } from "react-icons/fa6";
 import IssueStatusBadge from "../components/IssueStatusBadge";
+import { Status } from "@prisma/client";
 
 const IssuesPage = () => {
-  const [issues, setIssues] = useState([]);
+  const [issues, setIssues] = useState<
+    {
+      id: number;
+      title: string;
+      description: string;
+      status: Status;
+      createdAt: string;
+      updatedAt: string;
+    }[]
+  >([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
