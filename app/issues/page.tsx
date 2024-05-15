@@ -11,9 +11,16 @@ import { CiEdit } from "react-icons/ci";
 import { FaPlus } from "react-icons/fa6";
 import IssueStatusBadge from "../components/IssueStatusBadge";
 import { Status } from "@prisma/client";
-import IssueStatusFilter from "./list/IssueStatusFilter";
+import IssueStatusFilter from "./IssueStatusFilter";
+import Pagination from "../components/Pagination";
 
-const IssuesPage = () => {
+interface Props {
+  searchParams: { status: Status; page: string };
+}
+
+const IssuesPage = ({ searchParams }: Props) => {
+  console.log(searchParams.status);
+  const page = parseInt(searchParams.page) || 1;
   const [issues, setIssues] = useState<
     {
       id: number;
@@ -26,24 +33,64 @@ const IssuesPage = () => {
   >([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [itemCount, setItemCount] = useState(0);
+  const pageSize = 10;
 
-  const fetchData = async () => {
+  // const fetchData = async () => {
+  //   try {
+  //     if (searchParams.status) {
+  //       const response = await axios.get(
+  //         "/api/issues?status=" + searchParams.status
+  //       );
+  //       setIssues(response.data.issues);
+  //       setItemCount(response.data.totalCount);
+  //     } else {
+  //       const response = await axios.get("/api/issues");
+  //       setIssues(response.data.issues);
+  //       setItemCount(response.data.totalCount);
+  //     }
+  //     setLoading(false);
+  //   } catch (err) {
+  //     console.log(err);
+
+  //     setError("Error occured while fetching data");
+  //     setLoading(false);
+  //   }
+  // };
+
+  const fetchData = async (page: number, status: Status) => {
     try {
-      const response = await axios.get("/api/issues");
-      console.log(response.data);
-      setIssues(response.data);
+      let url = "/api/issues";
+      if (status) {
+        url += `?status=${status}`;
+      }
+      if (page) {
+        url += `${status ? "&" : "?"}page=${page}`;
+      }
+
+      const response = await axios.get(url);
+      setIssues(response.data.issues);
+      setItemCount(response.data.totalCount);
       setLoading(false);
     } catch (err) {
       console.log(err);
-
-      setError("Error occured while fetching data");
+      setError("Error occurred while fetching data");
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    fetchData(page, searchParams.status);
+  }, [searchParams.status, page]);
+
+  console.log(
+    "Item Count",
+    itemCount,
+    "Page Size",
+    pageSize,
+    "Current Page",
+    page
+  );
 
   return (
     <div>
@@ -59,7 +106,7 @@ const IssuesPage = () => {
       <Table.Root variant="surface">
         <Table.Header>
           <Table.Row>
-            <Table.ColumnHeaderCell>Ttile</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell>Title</Table.ColumnHeaderCell>
             {/* <Table.ColumnHeaderCell className="hidden md:table-cell">
               Description
             </Table.ColumnHeaderCell> */}
@@ -100,6 +147,11 @@ const IssuesPage = () => {
           ))}
         </Table.Body>
       </Table.Root>
+      <Pagination
+        itemCount={itemCount}
+        pageSize={pageSize}
+        currentPage={page}
+      />
       {loading && (
         <div className="p-5 flex justify-center items-center mt-32">
           <Spinner />
