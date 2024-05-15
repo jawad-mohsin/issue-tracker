@@ -11,6 +11,7 @@ import { CiEdit } from "react-icons/ci";
 import { FaPlus } from "react-icons/fa6";
 import IssueStatusBadge from "../components/IssueStatusBadge";
 import { Status } from "@prisma/client";
+import IssueStatusFilter from "./list/IssueStatusFilter";
 
 const IssuesPage = () => {
   const [issues, setIssues] = useState<
@@ -48,6 +49,7 @@ const IssuesPage = () => {
     <div>
       <div className="flex justify-between mb-5">
         <h1 className="text-center font-bold mb-5">Current Issues</h1>
+        <IssueStatusFilter />
         <Button>
           <Link className="flex justify-center items-center" href="/issues/new">
             New Issue <FaPlus className="ml-2" />
@@ -58,9 +60,9 @@ const IssuesPage = () => {
         <Table.Header>
           <Table.Row>
             <Table.ColumnHeaderCell>Ttile</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell className="hidden md:table-cell">
+            {/* <Table.ColumnHeaderCell className="hidden md:table-cell">
               Description
-            </Table.ColumnHeaderCell>
+            </Table.ColumnHeaderCell> */}
             <Table.ColumnHeaderCell>Status</Table.ColumnHeaderCell>
             <Table.ColumnHeaderCell className="hidden sm:table-cell">
               Created At
@@ -77,9 +79,9 @@ const IssuesPage = () => {
               <Table.Cell className="text-violet text-violet-700 hover:underline">
                 <Link href={`/issues/${issue.id}`}>{issue.title}</Link>
               </Table.Cell>
-              <Table.Cell className="hidden md:table-cell">
+              {/* <Table.Cell className="hidden md:table-cell">
                 {issue.description}
-              </Table.Cell>
+              </Table.Cell> */}
               <Table.Cell>
                 <IssueStatusBadge status={issue.status} />
               </Table.Cell>

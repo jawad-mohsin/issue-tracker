@@ -14,6 +14,7 @@ import ErrorMessage from "@/app/components/ErrorMessage";
 import Spinner from "@/app/components/Spinner";
 import { MdOutlineDownloadDone } from "react-icons/md";
 import { Issue } from "@prisma/client";
+import toast, { Toaster } from "react-hot-toast";
 
 type IssueFormData = z.infer<typeof issueSchema>;
 
@@ -42,26 +43,25 @@ const IssueForm = ({ issue }: Props) => {
       setSubmitting(true);
       if (issue) {
         await axios.patch(`/api/issues/${issue.id}`, data);
+        toast.success("Issue updated successfully!");
       } else {
         await axios.post("/api/issues", data);
+        toast.success("Issue created successfully!");
       }
       setSubmitting(false);
       setSubmitted(true);
-      router.push("/issues");
+      setTimeout(() => {
+        router.push("/issues");
+      }, 2000);
       console.log(data);
-    } catch (error) {
+    } catch (err) {
       setSubmitting(false);
-      setError("An error is occured");
+      toast.error("Failed to update issue");
     }
   });
 
   return (
     <div>
-      {error && (
-        <Callout.Root color="red" className="mb-5">
-          <Callout.Text>{error}</Callout.Text>
-        </Callout.Root>
-      )}
       <form className="max-w-xl space-y-5" onSubmit={onSubmit}>
         <TextField.Root
           placeholder="Title"
@@ -86,6 +86,7 @@ const IssueForm = ({ issue }: Props) => {
           {isSubmitting && <Spinner />}
         </Button>
       </form>
+      <Toaster />
     </div>
   );
 };
