@@ -3,16 +3,14 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@radix-ui/themes";
 import Link from "next/link";
-import { Table } from "@radix-ui/themes";
 import axios from "axios";
 import Spinner from "../components/Spinner";
 import ErrorMessage from "../components/ErrorMessage";
-import { CiEdit } from "react-icons/ci";
 import { FaPlus } from "react-icons/fa6";
-import IssueStatusBadge from "../components/IssueStatusBadge";
 import { Status } from "@prisma/client";
 import IssueStatusFilter from "./IssueStatusFilter";
 import Pagination from "../components/Pagination";
+import IssuesTable from "./IssuesTable";
 
 interface Props {
   searchParams: { status: Status; page: string };
@@ -103,50 +101,7 @@ const IssuesPage = ({ searchParams }: Props) => {
           </Link>
         </Button>
       </div>
-      <Table.Root variant="surface">
-        <Table.Header>
-          <Table.Row>
-            <Table.ColumnHeaderCell>Title</Table.ColumnHeaderCell>
-            {/* <Table.ColumnHeaderCell className="hidden md:table-cell">
-              Description
-            </Table.ColumnHeaderCell> */}
-            <Table.ColumnHeaderCell>Status</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell className="hidden sm:table-cell">
-              Created At
-            </Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell className="hidden md:table-cell">
-              Updated At
-            </Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>Edit</Table.ColumnHeaderCell>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          {issues.map((issue) => (
-            <Table.Row key={issue.id}>
-              <Table.Cell className="text-violet text-violet-700 hover:underline">
-                <Link href={`/issues/${issue.id}`}>{issue.title}</Link>
-              </Table.Cell>
-              {/* <Table.Cell className="hidden md:table-cell">
-                {issue.description}
-              </Table.Cell> */}
-              <Table.Cell>
-                <IssueStatusBadge status={issue.status} />
-              </Table.Cell>
-              <Table.Cell className="hidden sm:table-cell">
-                {issue.createdAt}
-              </Table.Cell>
-              <Table.Cell className="hidden md:table-cell">
-                {issue.updatedAt}
-              </Table.Cell>
-              <Table.Cell>
-                <Link href={`/issues/${issue.id}/edit`}>
-                  <CiEdit />
-                </Link>
-              </Table.Cell>
-            </Table.Row>
-          ))}
-        </Table.Body>
-      </Table.Root>
+      <IssuesTable issues={issues} />
       <Pagination
         itemCount={itemCount}
         pageSize={pageSize}
