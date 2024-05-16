@@ -93,7 +93,7 @@ const IssuesPage = ({ searchParams }: Props) => {
   return (
     <div>
       <div className="flex justify-between mb-5">
-        <h1 className="text-center font-bold mb-5">Current Issues</h1>
+        {/* <h1 className="text-center font-bold mb-5">Current Issues</h1> */}
         <IssueStatusFilter />
         <Button>
           <Link className="flex justify-center items-center" href="/issues/new">
