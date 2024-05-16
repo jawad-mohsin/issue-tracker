@@ -11,6 +11,7 @@ import { Status } from "@prisma/client";
 import IssueStatusFilter from "./IssueStatusFilter";
 import Pagination from "../components/Pagination";
 import IssuesTable from "./IssuesTable";
+import { Metadata } from "next";
 
 interface Props {
   searchParams: { status: Status; page: string };

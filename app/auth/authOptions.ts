@@ -18,9 +18,9 @@ export const authOptions: NextAuthOptions = {
     async redirect(baseUrl) {
       // Check if running in the browser environment before redirecting
       if (typeof window !== "undefined") {
-        window.location.href = "/issues";
+        window.location.href = "/";
       }
-      return "/issues"; // Return default URL for non-browser environments
+      return "/"; // Return default URL for non-browser environments
     },
   },
 };

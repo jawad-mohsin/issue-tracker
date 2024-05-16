@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { TextField, Callout, Button, Text } from "@radix-ui/themes";
+import { TextField, Callout, Button, Text, Flex } from "@radix-ui/themes";
 import SimpleMDE from "react-simplemde-editor";
 import { useForm, Controller } from "react-hook-form";
 import "easymde/dist/easymde.min.css";
@@ -78,13 +78,15 @@ const IssueForm = ({ issue }: Props) => {
           )}
         />
         <ErrorMessage>{errors.description?.message}</ErrorMessage>
-        <Button disabled={isSubmitting}>
-          <Text className="cursor-pointer">
-            {issue ? "Update Issue" : "Create New Issue"}
-          </Text>
-          {isSubmitted && <MdOutlineDownloadDone />}
-          {isSubmitting && <Spinner />}
-        </Button>
+        <Flex justify="end">
+          <Button disabled={isSubmitting}>
+            <Text className="cursor-pointer">
+              {issue ? "Update Issue" : "Create New Issue"}
+            </Text>
+            {isSubmitted && <MdOutlineDownloadDone />}
+            {isSubmitting && <Spinner />}
+          </Button>
+        </Flex>
       </form>
       <Toaster />
     </div>

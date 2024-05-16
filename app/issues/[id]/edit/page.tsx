@@ -2,6 +2,8 @@ import React from "react";
 import IssueForm from "../../_components/IssueForm";
 import prisma from "@/prisma/client";
 import { notFound } from "next/navigation";
+import { Flex } from "@radix-ui/themes";
+import GoBack from "@/app/components/GoBack";
 
 interface Props {
   params: { id: string };
@@ -15,9 +17,12 @@ const EditIssuePage = async ({ params }: Props) => {
 
   if (!issue) notFound();
   return (
-    <div>
-      <IssueForm issue={issue} />
-    </div>
+    <>
+      <Flex justify={"center"}>
+        <IssueForm issue={issue} />
+      </Flex>
+      <GoBack />
+    </>
   );
 };
 
